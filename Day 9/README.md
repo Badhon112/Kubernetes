@@ -1,4 +1,4 @@
-## Day 9 : YAML Tutorial for Kubernetes | Imperative vs Declarative
+# Day 9 : YAML Tutorial for Kubernetes | Imperative vs Declarative
 
 - Agenda :
   1.  Imperative vs. Declarative
