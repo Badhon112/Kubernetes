@@ -190,4 +190,8 @@ $ kubectl rollout history deployment <NameOfThe-Deployment>
 # Now want to go to the Prev deployment or the history list of that Deployment
 $ kubectl rollout undo deployment <NameOfThe-Deployment> --to-revision=$Number
 
+
+# Select the Pod only using the label name 
+$ kubectl get pods -l app=frontend -o wide
+
 ```

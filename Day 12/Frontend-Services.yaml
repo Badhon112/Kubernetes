@@ -1,0 +1,73 @@
+# Deployment
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: frontend-deploy
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: frontend
+#       # env: frontend-deployment
+#   template:
+#     metadata:
+#       labels:
+#         app: frontend
+#     spec:
+#       containers:
+#         - name: nginx-container
+#           image: nginx
+#           command: ["/bin/sh","-c"]
+#           args:
+#             - |
+#               echo "Hello from $POD_NAME" > /usr/share/nginx/html/index.html
+#               nginx -g "daemon off;"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deploy
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+
+          command: ["/bin/sh", "-c"]
+
+          args:
+            - |
+              echo "Hello from $POD_NAME" > /usr/share/nginx/html/index.html
+              nginx -g "daemon off;"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80 # ClusterIP service Port
+      targetPort: 80 # The container's Port
+      nodePort: 31000 # NodePort (must be within 30000-32767)
+  selector:
+    app: frontend
