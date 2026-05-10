@@ -90,8 +90,9 @@ $ kubectl edit rc <Replication_Controller_Name>
 
 - ReplicaSet yaml main syntax :
 
-```bash
+- File Name Rc.yaml
 
+```bash
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
@@ -111,5 +112,82 @@ spec:
               image: nginx
               ports:
                 - containerPort: 80
+
+```
+
+- Command Line for Replication Controller Set
+
+```bash
+# TO create a Replication Controller Set
+$ kubectl apply -f Rc.yaml
+
+# To get all the resources running in the system
+$ kubectl get all -o wide
+
+# To delete the specify rc in the services
+$ kubectl delete rc rc_name
+```
+
+- **labels & Selectors**
+  - Equality Based Selectors
+    - Matches pods where the label key equals a specific value (app: nginx)
+    - rc, rs, Deployment
+  - Set-based Selectors
+    - Matches pods based on conditions (In, NotIn, Exists, DoesNotExist)
+    - rs, Deployment
+
+---
+
+## Deployment
+
+- Deployment is an orchestration layer that sits on the top of Replica Set.
+- Deployment.yaml
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initial release with nginx 1.19"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      env: deployment
+  template:
+    metadata:
+      labels:
+        app: nginx
+        env: deployment
+    spec:
+     containers:
+      - name: nginx
+        image: nginx:1.19
+        ports:
+          - containerPort: 80
+
+```
+
+- **Cli for this Deployment**
+```bash
+# To apply the deployment.yaml 
+$ kubectl apply -f deployment.yaml
+
+# To get the deployment info 
+$ kubectl get deploy -o wide
+
+# To check the History of the deployment
+$ kubectl rollout history deployment <NameOfThe-Deployment>
+
+# To update the container/pod inside the deployment keep the same deployment name and changed the annotation it will keep truck. After Changing the annotation and image run.
+$ kubectl apply -f deployment.yaml
+
+# Check the history using
+$ kubectl rollout history deployment <NameOfThe-Deployment>
+
+# Now want to go to the Prev deployment or the history list of that Deployment
+$ kubectl rollout undo deployment <NameOfThe-Deployment> --to-revision=$Number
 
 ```

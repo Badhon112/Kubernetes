@@ -52,6 +52,8 @@ nodes:
 
 ```
 
+- In PowerShell $Get-Command kubectl -All
+
 ```bash
 $ kind create cluster # Default cluster context name is `kind`.
 
