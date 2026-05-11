@@ -155,4 +155,55 @@ spec:
 
 ## LoadBalancer Service
 
-- Provides a single public Ip with automatic failover, so no manual intervention is needed if a node gose down.
+- Provides a single public Ip with automatic failover, so no manual intervention is needed if a node goes down.
+- NodePort(31000) -> ClusterIp(80) -> Pod (80)
+- Provides a single public IP with automatic failover. so no manual intervention is needed if a node goes down
+- <loadBalancer External IP>:80 -> NodePort(31000) -> ClusterIP(80) -> Pod (80)
+
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-lb-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Hello from $POD_NAME" > /usr/share/nginx/html/index.html
+              nginx -g "daemon off;"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31000
+
+```
+
+## ExternalName Service
+- Forward internal requests to external services by DNS name
