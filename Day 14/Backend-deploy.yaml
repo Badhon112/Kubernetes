@@ -1,0 +1,47 @@
+# NameSpace
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend-namespace
+
+---
+# Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  namespace: backend-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend-container
+          image: hashicorp/http-echo
+          args:
+            - "-text=Hello from backend Badhon"
+
+---
+# Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: backend-namespace
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 5678
+  selector:
+    app: backend
