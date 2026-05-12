@@ -66,6 +66,8 @@ $ kubectl get nodes # To get all the node in the cluster
 $ kubectl config get-contexts # The see the current cluster that you work In.
 
 $ kubectl config use-context
+
+$ kind delete cluster --name my-first-cluster
 ```
 
 - **Available Commands:**
