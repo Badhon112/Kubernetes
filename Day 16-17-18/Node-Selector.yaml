@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app1-deploy
+  template:
+    metadata:
+      labels:
+        app: app1-deploy
+    spec:
+      nodeSelector:
+        storage: ssd
+      containers:
+        - name: nginx
+          image: nginx
