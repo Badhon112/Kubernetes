@@ -92,7 +92,7 @@ spec:
 # The Pod will remain in Failed state
 ```
 
-- **_Image Pull Policy_**
+- **_Image Pull Policy(Image Level)_**
 - _IfNotPresent_:
   - Use Case : Use ifNotPresent in production environment to avoid unnecessary image pulls
   - Behavior: Use the image in node's cache or pull it from the registry if it isn't present
