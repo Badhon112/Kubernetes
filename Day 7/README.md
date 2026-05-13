@@ -59,7 +59,7 @@ $ kind create cluster # Default cluster context name is `kind`.
 
 $ kind create cluster --name my-first-cluster --config .\kind-cluster.yaml
 
-$ kind get cluster # To get the cluster Name
+$ kind get clusters # To get the cluster Name
 
 $ kubectl get nodes # To get all the node in the cluster
 
