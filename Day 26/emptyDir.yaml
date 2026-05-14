@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox_pod
+spec:
+  volumes:
+    - name: temp-storage
+      emptyDir: {}
+
+  containers:
+    - name: busybox-container-1
+      image: busybox
+      command: ["/bin/sh", "c", "sleep 300"]
+      volumeMounts:
+        - mountPath: /data
+          name: temp-storage
+
+    - name: busybox-container-2
+      image: busybox
+      command: ["/bin/sh", "c", "sleep 300"]
+      volumeMounts:
+        - mountPath: /data
+          name: temp-storage
+
+---
