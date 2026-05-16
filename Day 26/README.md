@@ -62,3 +62,63 @@ $ kubectl exec -it busybox_pod -c busybox-container-1 -- /bin/sh
 
 - _downwardAPI_
   - Allows pods to access metadata bout themselves. Metadata like pods name, namespace, labels, resource limits etc.
+
+- Simple way to understand volumes and volumeMounts in Kubernetes.
+  - _volumes_ : Create or connect storage for the pod.
+  - _volumeMounts_ : Attach that storage inside a container path.
+
+```bash
+Pod
+│
+├── Container
+│     └── volumeMounts
+│           └── Mount storage at /usr/share/nginx/html
+│
+└── volumes
+      └── Actual storage source (PVC)
+```
+
+- _volumeMounts_
+
+```bash
+volumeMounts:
+  - mountPath: /usr/share/nginx/html
+    name: persistent-storage
+```
+
+- _volume_
+
+```bash
+volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: example-pvc
+```
+
+- pod.yaml
+
+```bash
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  volumes:
+    - name: persistent-volume-claim
+      persistentVolumeClaim:
+        claimName: example-pvc
+  containers:
+    - name: nginx-container
+      image: nginx
+      resources:
+        requests:
+          cpu: "40m"
+          memory: "100Mi"
+        limits;
+          cpu : "50m"
+          memory: "150Mi"
+      volumeMounts:
+        name: persistent-storage
+        persistentVolumeClaim:
+          claimName: persistent-volume-claim
+```

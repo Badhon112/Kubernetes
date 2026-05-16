@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  volumes:
+    - name: persistent-storage
+      persistentVolumeClaim:
+      claimName: example-pvc
+
+  containers:
+    - name: nginx-container
+      image: nginx
+      resources:
+        requests:
+          cpu: "40m"
+          memory: "100mi"
+        limits:
+          cpu: "50m"
+          memory: "100mi"
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: persistent-storage
