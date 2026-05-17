@@ -1,0 +1,12 @@
+- _Why do we need ConfigMap?_
+  - Decoupling
+  - Portability - No App, code changes when you deploy your app elsewhere
+  - inject config Data into Pods
+
+- _Why is ConfigMap?_
+- Used to store non-confidential key-value configuration data.
+- Do not provide encryption or secrecy
+- Pods can consume ConfigMaps in three primary ways
+  - As environment variables.
+  - As command-line arguments (Less Common)
+  - As configuration files via mounted volumes

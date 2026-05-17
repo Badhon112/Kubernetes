@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Configmap
+metadata:
+  name: frontend-cm
+data:
+  APP: "Frontend"
+  ENVIRONMENT: "production"
