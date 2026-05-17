@@ -6,7 +6,7 @@ spec:
   volumes:
     - name: persistent-storage
       persistentVolumeClaim:
-      claimName: example-pvc
+        claimName: example-pvc
 
   containers:
     - name: nginx-container
@@ -21,3 +21,27 @@ spec:
       volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: persistent-storage
+---
+# aws Pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: csi-pod
+spec:
+  volumes:
+    - name: csi-volume
+      persistentVolumeClaim:
+        claimName: ""
+  containers:
+    - name: nginx-container
+      image: nginx
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "100mi"
+        limits:
+          cpu: "100m"
+          memory: "150mi"
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: csi-volume

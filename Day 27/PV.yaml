@@ -9,3 +9,22 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /mnt/data
+
+---
+# AWS PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebs-csi-pv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentvolumeReclaimPolicy: Retain
+  storageClassName: ""
+  csi:
+    driver: ebs.csi.aws.com
+    volumeHandle: vol...
+    fsType: ext4

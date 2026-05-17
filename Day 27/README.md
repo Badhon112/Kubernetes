@@ -20,6 +20,8 @@
 
 - ![PVC and PC access Mode](./pv&pvcaccessmode.png)
 
+### From Physical Device
+
 - _PVFile.yaml_
 
 ```bash
@@ -66,4 +68,71 @@ spec:
     requests:
       storage: 2Gi
 
+```
+
+---
+
+### In Kubernetes, a PVC chooses a PV based on matching rules
+
+- Kubernetes automatically checks:
+  - Storage size
+  - Access mode
+  - StorageClass
+  - Availability
+
+1. PersistentVolume (PV)
+
+```bash
+apiVersion: v1
+kind: PersistentVolume
+
+metadata:
+  name: my-pv
+
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual-storage
+  hostPath:
+    path: /mnt/data
+```
+
+2. persistentVolumeClaim(PVC)
+
+```bash
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: manual-storage
+  volumeName: my-pv
+```
+
+3. Pod Using the PVC
+
+```bash
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: my-storage
+  volumes:
+    - name: my-storage
+      persistentVolumeClaim:
+        claimName: my-pvc
 ```
