@@ -1,0 +1,6 @@
+- Kubernetes API
+  - The primary interface to your cluster
+  - It is an umbrella term
+  - KubernetesAPI is RESTFull meaning
+    - Uses HTTP verbs like GET, POST, PUT, PATCH, and DELETE to interact with resources (pods, svc, cm etc)
+  - Kubernetes organizes its API using API group
