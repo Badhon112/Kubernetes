@@ -274,10 +274,10 @@ $ kubectl config set-credentials badhon \
     --certificate-authority=ba.crt \
     --embed-certs=true
 
-# kubectl config view
+$ kubectl config view
 
-kubectl config set-cluster {cluster_name} \
-  --server={server_ip} \
+$ kubectl config set-cluster kind-my-cluster \
+  --server=https://127.0.0.1:14784 \
   --certificate-authority=ba.crt \
   --embed-certs=true \
   --kubeconfig=~/.kube/config
