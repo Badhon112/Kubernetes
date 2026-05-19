@@ -220,6 +220,9 @@ $ kubectl config set-contexts user_name
 # Full Code of the User Access
 
 ```bash
+# Create a Cluster 
+$ kind create cluster --name my-cluster --config ./kind-cluster.yaml
+
 # To run the openssl in windows first open git bash and run as administrator then run.
 $ openssl genrsa -out badhon.key 2048
 
@@ -297,5 +300,14 @@ $ kubectl config get-contexts
 
 # Switch the context of that
 $ kubectl config use-context {context_name}
+
+# View The Config
+$ Kubectl config view
+
+# To view the context
+$ kubectl config get-contexts
+
+# To use as a user
+$ kubectl config set-contexts user_name
 
 ```
