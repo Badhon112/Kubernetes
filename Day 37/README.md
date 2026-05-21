@@ -36,3 +36,87 @@
     - Manually created by associating a service Account with a secret.
     - These tokens never expire, posing security risks.
     - Not recommended due to static nature and security risk.
+
+- A service account is a type of non-human account that, in Kubernetes, provides a distinct(স্বতন্ত্র) identity in a Kubernetes cluster. Application Pods, system components, and entities inside and outside the cluster can use a specific ServiceAccount's credentials to identify as that ServiceAccount.
+
+---
+
+## Demo: Creating and Using a ServiceAccount for Jenkins
+
+### Step 1: Create a Service Account for Jenkins
+
+First, define a Service Account for Jenkins in the jenkins namespace.
+
+```bash
+kubectl create ns jenkins
+kubectl create sa jenkins-sa -n jenkins
+```
+
+### Step 2: Create ClusterRole and ClusterRoleBinding for Jenkins SA
+
+Next, grant the ServiceAccount permissions by binding it to a ClusterRole:
+
+```bash
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: jenkins-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints"]
+    verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "delete", "patch", "update"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-cluster-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-sa
+    namespace: jenkins
+    apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: jenkins-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+Apply it:
+
+```bash
+kubectl apply -f jenkins-rbac.yaml
+```
+
+## Step 3: Generate a Manual Long-Lived Token (Deprecated Approach)
+
+This step demonstrates how Jenkins can initially use a manually created Service Account token, though this method is not recommended for production.
+
+1️⃣ Create a Secret explicitly bound to the Service Account:
+
+```bash
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins-sa-secret
+  namespace: jenkins
+  annotations:
+    kubernetes.io/service-account.name: jenkins-sa
+type: kubernetes.io/service-account-token
+```
+
+Apply it:
+
+```bash
+kubectl apply -f jenkins-sa-secret.yaml
+```
+
+2️⃣ Retrieve the token from the Secret:
+
+```bash
+kubectl describe -n jenkins secrets jenkins-sa-secret
+```
