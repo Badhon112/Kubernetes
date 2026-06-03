@@ -7,7 +7,7 @@
 
 One primary node (formerly called the master) : handles all writes Multiple replicas (read-only) : provide redundancy and help with read scaling.
 
-![StateFull vs StateLess](./1.png)
+![StateFull vs StateLess](./image/1.png)
 
 ## What it takes to run a Database?
 
@@ -22,7 +22,7 @@ One primary node (formerly called the master) : handles all writes Multiple repl
     - keep syncing future writes/modifications from the primary
     - Direct replication
 
-- ![Database Architecture](./2.png)
+- ![Database Architecture](./image/2.png)
 
 - A common architecture involves one primary (or master) node that handles both reads and writes, and multiple replica nodes that are read-only. Applications or services that need to perform write operations (inserts, updates, deletes) are directed to the primary.
 
@@ -47,3 +47,26 @@ One primary node (formerly called the master) : handles all writes Multiple repl
   - Reliable disk-backed writes and transactional consistency. _(ACID = Associated with Isolation database)_ / _(Atomicity Consistency Isolation Durability)_
 - Because of the above reasons:
   - Block storage is preferred with RWO or RWOP (Preferred)
+
+### What are StateFulSets (sts)
+
+- It is a k8is workload controller that is purpose-built for managing stateful applications, where pod identity, network stability, and storage persistence are critical.
+- Key points about sts:
+  - They provide:
+    - Stable & Predictable pod naming
+    - stable n/w identity (Stable DNS Name)
+    - Start & Termination Order
+    - Persistent Volume re-attachment
+  - These properties make sts ideal for:
+    - Relational databases : MYSQL, PostgreSQL
+    - Distributed systems : Cassandra, Elasticsearch
+    - Queues and coordination services : Kafka, Zookeeper
+  - Replicated caches: Radis Cluster, MongoDB ReplicaSets
+
+- *Nomenclature*:
+	- Pod name (stable identity)
+		- Syntax : <statefulset-name>-<ordinal-index>
+		- Example : mysql-0
+	- DNS Name (Stable network Identity)
+		- Syntax: <pod-name>.<headless-service-name>.<namespace>.svc.cluster.local
+		- Example : mysql-0.mysql-ha.svc.cluster.local
