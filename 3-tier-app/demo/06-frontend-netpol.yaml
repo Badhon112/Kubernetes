@@ -10,21 +10,32 @@ spec:
       role: frontend
   policyTypes:
     - Ingress
-    - Egress 
+    - Egress
   ingress:
     - from:
-      - ipBlock:
-          cidr: 0.0.0.0/0
+        - ipBlock:
+            cidr: 0.0.0.0/0
       ports:
         - protocol: TCP
           port: 80
   egress:
     - to:
-      - podSelector:
-          matchLabels:
-            app: app1
-            role: backend 
-        ports:
-          - protocol: TCP
-            port: 5678
-    
+        - podSelector:
+            matchLabels:
+              app: app1
+              role: backend
+          ports:
+            - protocol: TCP
+              port: 5678
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
