@@ -328,3 +328,9 @@ $ docker compose up -d
 ```bash
 $ docker run --name sonarqube-custom -p 9000:9000 sonarqube:community
 ```
+
+- _Trivy_ :
+  - Trivy scan the vulnerability in dependency. Or in The package
+
+- _SonarQube_ :
+  - SonarQube scan the vulnerability in the Source Code.
